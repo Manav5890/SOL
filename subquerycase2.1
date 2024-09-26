@@ -1,0 +1,216 @@
+SQL> SELECT ENAME
+  2  FROM EMP
+  3  WHERE SAL> (SELECT SAL
+  4              FROM EMP
+  5              WHERE ENAME = 'SCOTT') AND DEPTNO = (SELECT DEPTNO
+  6                                                   FROM DEPT
+  7                                                   WHERE DNAME = 'ACCOUNTING');
+
+ENAME                                                                                                                                                                                                   
+----------                                                                                                                                                                                              
+KING                                                                                                                                                                                                    
+
+SQL> --Q2
+SQL> SELECT *
+  2  FROM EMP
+  3  WHERE JOB = 'MANAGER' AND DEPTNO = (SELECT DEPTNO
+  4                                      FROM DEPT
+  5                                      WHERE LOC = 'CHICAGO');
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                   
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                   
+      7698 BLAKE      MANAGER         7839 01-MAY-81       2850                    30                                                                                                                   
+
+SQL> --Q3
+SQL> SELECT ENAME, SAL
+  2  FROM EMP
+  3  WHERE SAL>(SELECT SAL
+  4             FROM EMP
+  5             WHERE ENAME = 'KING') AND
+  6        DEPTNO =(SELECT DEPTNO
+  7                 FROM DEPT
+  8                 WHERE DNAME = 'ACCOUNTING');
+
+no rows selected
+
+SQL> --Q4
+SQL> SELECT *
+  2  FROM EMP
+  3  WHERE JOB = 'SALESMAN' AND
+  4        DEPTNO =(SELECT DEPTNO
+  5                 FORM DEPT
+  6                 WHERE DNAME = 'SALES);
+ERROR:
+ORA-01756: quoted string not properly terminated 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM EMP
+  3  WHERE JOB = 'SALESMAN' AND
+  4        DEPTNO =(SELECT DEPTNO
+  5                 FORM DEPT
+  6*                WHERE DNAME = 'SALES')
+SQL> /
+               FORM DEPT
+                    *
+ERROR at line 5:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM EMP
+  3  WHERE JOB = 'SALESMAN' AND
+  4        DEPTNO =(SELECT DEPTNO
+  5                 FROM DEPT
+  6*                WHERE DNAME = 'SALES')
+SQL> /
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                   
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                   
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30                                                                                                                   
+      7521 WARD       SALESMAN        7698 22-FEB-81       1250        500         30                                                                                                                   
+      7654 MARTIN     SALESMAN        7698 28-SEP-81       1250       1400         30                                                                                                                   
+      7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0         30                                                                                                                   
+
+SQL> --Q5
+SQL> SELECT ENAME, JOB, SAL, HIREDATE
+  2  FROM EMP
+  3  WHERE HIREDATE = (SELECT HIREDATE
+  4                    FROM EMP
+  5                    WHERE ENAME = 'KING') AND
+  6       DEPTNO = (SELECT DEPTNO
+  7                 FROM DEPT
+  8                 WHERE DNAME = 'OPERATIONS');
+
+no rows selected
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENAME, JOB, SAL, HIREDATE
+  2  FROM EMP
+  3  WHERE HIREDATE < (SELECT HIREDATE
+  4                    FROM EMP
+  5                    WHERE ENAME = 'KING') AND
+  6       DEPTNO = (SELECT DEPTNO
+  7                 FROM DEPT
+  8*                WHERE DNAME = 'OPERATIONS')
+SQL> /
+
+no rows selected
+
+SQL> --Q6
+SQL> 
+SQL> SELECT *
+  2  FROM EMP
+  3  WHERE DEPTNO = (SELECT DEPTNO
+  4                  FROM DEPT
+  5                  WHERE DNAME LIKE'%S');
+WHERE DEPTNO = (SELECT DEPTNO
+                *
+ERROR at line 3:
+ORA-01427: single-row subquery returns more than one row 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM EMP
+  3  WHERE DEPTNO IN (SELECT DEPTNO
+  4                  FROM DEPT
+  5*                 WHERE DNAME LIKE'%S')
+SQL> /
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                   
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                   
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30                                                                                                                   
+      7521 WARD       SALESMAN        7698 22-FEB-81       1250        500         30                                                                                                                   
+      7654 MARTIN     SALESMAN        7698 28-SEP-81       1250       1400         30                                                                                                                   
+      7698 BLAKE      MANAGER         7839 01-MAY-81       2850                    30                                                                                                                   
+      7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0         30                                                                                                                   
+      7900 JAMES      CLERK           7698 03-DEC-81        950                    30                                                                                                                   
+
+6 rows selected.
+
+SQL> --Q7
+SQL> SELECT DNAME
+  2  FROM DEPT
+  3  WHERE DEPTNO IN(SELECT DEPTNO
+  4                  FROM DEPT
+  5                  WHERE ENAME LIKE '%A%');
+                WHERE ENAME LIKE '%A%')
+                      *
+ERROR at line 5:
+ORA-00904: "ENAME": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DNAME
+  2  FROM DEPT
+  3  WHERE DEPTNO IN(SELECT DEPTNO
+  4                  FROM EMP
+  5*                 WHERE ENAME LIKE '%A%')
+SQL> /
+
+DNAME                                                                                                                                                                                                   
+--------------                                                                                                                                                                                          
+SALES                                                                                                                                                                                                   
+ACCOUNTING                                                                                                                                                                                              
+RESEARCH                                                                                                                                                                                                
+
+SQL> --Q8
+SQL> SELECT DNAME, LOC
+  2  FROM DEPT
+  3  WHERE DEPTNO =( SELECT DEPTNO
+  4                  FROM EMP
+  5                  WHERE SAL = 800);
+
+DNAME          LOC                                                                                                                                                                                      
+-------------- -------------                                                                                                                                                                            
+RESEARCH       DALLAS                                                                                                                                                                                   
+
+SQL> --Q9
+SQL> SELECT DNAME
+  2  FROM DEPT
+  3  WHERE DEPTNO IN( SELECT DEPTNO
+  4                   FROM EMP
+  5                   WHERE COMM IS NOT NULL);
+
+DNAME                                                                                                                                                                                                   
+--------------                                                                                                                                                                                          
+SALES                                                                                                                                                                                                   
+
+SQL> --Q10
+SQL> SELECT LOC
+  2  FROM DEPT
+  3  WHERE DEPTNO = 40 AND DEPTNO =(SELECT DEPTNO
+  4                                  FROM EMP
+  5                                  WHERE COMM IS NOT NULL);
+WHERE DEPTNO = 40 AND DEPTNO =(SELECT DEPTNO
+                               *
+ERROR at line 3:
+ORA-01427: single-row subquery returns more than one row 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT LOC
+  2  FROM DEPT
+  3  WHERE DEPTNO = 40 AND DEPTNO IN(SELECT DEPTNO
+  4                                  FROM EMP
+  5*                                 WHERE COMM IS NOT NULL)
+SQL> /
+
+no rows selected
+
+SQL> SPOOL OFF;
