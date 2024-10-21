@@ -1,0 +1,119 @@
+SQL> SET PAGES 200 LINES 200;
+SQL> --Q.69
+SQL> SELECT MIN(SAL),MGR
+  2  FROM EMP
+  3  GROUP BY JOB,MGR;
+
+  MIN(SAL)        MGR                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+       800       7902                                                                                                                                                                                   
+      5000                                                                                                                                                                                              
+       950       7698                                                                                                                                                                                   
+      1100       7788                                                                                                                                                                                   
+      1300       7782                                                                                                                                                                                   
+      1250       7698                                                                                                                                                                                   
+      2450       7839                                                                                                                                                                                   
+      3000       7566                                                                                                                                                                                   
+
+8 rows selected.
+
+SQL> --Q.67
+SQL> SELECT JOB,DEPTNO
+  2  FROM EMP
+  3  WHERE HIREDATE BETWEEN '01-JAN-81' AND '31-DEC-81'
+  4  GROUP BY DEPTNO,JOB
+  5  HAVING MAX(ENAME);
+HAVING MAX(ENAME)
+                *
+ERROR at line 5:
+ORA-00920: invalid relational operator 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT JOB,DEPTNO
+  2  FROM EMP
+  3  WHERE HIREDATE BETWEEN '01-JAN-81' AND '31-DEC-81'
+  4  GROUP BY DEPTNO,JOB,ENAME
+  5* HAVING MAX(ENAME)
+SQL> /
+HAVING MAX(ENAME)
+                *
+ERROR at line 5:
+ORA-00920: invalid relational operator 
+
+SQL> SELECT *
+  2  FROM EMP
+  3  WHERE ENAME LIKE '%A%A%';
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                   
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                   
+      7876 ADAMS      CLERK           7788 23-MAY-87       1100                    20                                                                                                                   
+
+SQL> --Q68
+SQL> 
+SQL> 
+SQL> --Q92
+SQL> SELECT JOB, COUNT(*)
+  2  FROM EMP
+  3  WHERE MGR LIKE '%8'
+  4  GROUP BY JOB
+  5  ORDER BY JOB;
+
+JOB         COUNT(*)                                                                                                                                                                                    
+--------- ----------                                                                                                                                                                                    
+CLERK              2                                                                                                                                                                                    
+SALESMAN           4                                                                                                                                                                                    
+
+SQL> --98
+SQL> SELECT JOB, MAX(HIREDATE), MIN(HIREDATE)
+  2  FROM EMP
+  3  WHERE COMM IS NOT NULL
+  4  GROUP BY JOB
+  5  ORDER BY JOB;
+
+JOB       MAX(HIRED MIN(HIRED                                                                                                                                                                           
+--------- --------- ---------                                                                                                                                                                           
+SALESMAN  28-SEP-81 20-FEB-81                                                                                                                                                                           
+
+SQL> SELECT HIREDATE, COUNT(*)
+  2  FROM EMP
+  3  WHERE JOB = 'MANAGER' AND JOB = 'SALESMAN'
+  4  GROUP BY HIREDATE , MGR;
+
+no rows selected
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT HIREDATE, MGR, JOB
+  2  FROM EMP
+  3  WHERE JOB = 'SALESMAN'
+  4* GROUP BY HIREDATE , MGR
+SQL> /
+SELECT HIREDATE, MGR, JOB
+                      *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT HIREDATE, MGR, JOB
+  2  FROM EMP
+  3  WHERE JOB = 'SALESMAN'
+  4* GROUP BY HIREDATE , MGR, JOB
+SQL> /
+
+HIREDATE         MGR JOB                                                                                                                                                                                
+--------- ---------- ---------                                                                                                                                                                          
+20-FEB-81       7698 SALESMAN                                                                                                                                                                           
+22-FEB-81       7698 SALESMAN                                                                                                                                                                           
+28-SEP-81       7698 SALESMAN                                                                                                                                                                           
+08-SEP-81       7698 SALESMAN                                                                                                                                                                           
+
+
+
+SQL> SPOOL OFF

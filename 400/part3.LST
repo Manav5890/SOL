@@ -1,0 +1,199 @@
+SQL> SET PAGES 200 LINES 200
+SQL> --Q40
+SQL> SELECT HIREDATE, DEPTNO, JOB
+  2  FROM EMP
+  3  WHERE HIREDATE LIKE '%__'
+  4  GROUP BY HIREDATE, DEPTNO, JOB;
+
+HIREDATE      DEPTNO JOB                                                                                                                                                                                
+--------- ---------- ---------                                                                                                                                                                          
+20-FEB-81         30 SALESMAN                                                                                                                                                                           
+08-SEP-81         30 SALESMAN                                                                                                                                                                           
+03-DEC-81         20 ANALYST                                                                                                                                                                            
+02-APR-81         20 MANAGER                                                                                                                                                                            
+23-JAN-82         10 CLERK                                                                                                                                                                              
+17-DEC-80         20 CLERK                                                                                                                                                                              
+22-FEB-81         30 SALESMAN                                                                                                                                                                           
+28-SEP-81         30 SALESMAN                                                                                                                                                                           
+09-JUN-81         10 MANAGER                                                                                                                                                                            
+19-APR-87         20 ANALYST                                                                                                                                                                            
+23-MAY-87         20 CLERK                                                                                                                                                                              
+03-DEC-81         30 CLERK                                                                                                                                                                              
+01-MAY-81         30 MANAGER                                                                                                                                                                            
+17-NOV-81         10 PRESIDENT                                                                                                                                                                          
+
+14 rows selected.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT HIREDATE, DEPTNO, JOB
+  2  FROM EMP
+  3  WHERE HIREDATE LIKE '%__'
+  4  GROUP BY HIREDATE, DEPTNO, JOB
+  5* ORDER BY HIREDATE
+SQL> /
+
+HIREDATE      DEPTNO JOB                                                                                                                                                                                
+--------- ---------- ---------                                                                                                                                                                          
+17-DEC-80         20 CLERK                                                                                                                                                                              
+20-FEB-81         30 SALESMAN                                                                                                                                                                           
+22-FEB-81         30 SALESMAN                                                                                                                                                                           
+02-APR-81         20 MANAGER                                                                                                                                                                            
+01-MAY-81         30 MANAGER                                                                                                                                                                            
+09-JUN-81         10 MANAGER                                                                                                                                                                            
+08-SEP-81         30 SALESMAN                                                                                                                                                                           
+28-SEP-81         30 SALESMAN                                                                                                                                                                           
+17-NOV-81         10 PRESIDENT                                                                                                                                                                          
+03-DEC-81         20 ANALYST                                                                                                                                                                            
+03-DEC-81         30 CLERK                                                                                                                                                                              
+23-JAN-82         10 CLERK                                                                                                                                                                              
+19-APR-87         20 ANALYST                                                                                                                                                                            
+23-MAY-87         20 CLERK                                                                                                                                                                              
+
+14 rows selected.
+
+SQL> SELECT SAL*12 AS ANUALSAL, ENAME
+  2  FROM EMP
+  3  WHERE ENAME LIKE 'S%';
+
+  ANUALSAL ENAME                                                                                                                                                                                        
+---------- ----------                                                                                                                                                                                   
+      9600 SMITH                                                                                                                                                                                        
+     36000 SCOTT                                                                                                                                                                                        
+
+SQL> SELECT JOB, SUM(SAL)
+  2  ;
+
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> --Q43
+SQL> SELECT JOB, SUM(SAL)
+  2  FROM EMP
+  3  GROUPBY JOB;
+GROUPBY JOB
+        *
+ERROR at line 3:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT JOB, SUM(SAL)
+  2  FROM EMP
+  3* GROUP BY JOB
+SQL> /
+
+JOB         SUM(SAL)                                                                                                                                                                                    
+--------- ----------                                                                                                                                                                                    
+CLERK           4150                                                                                                                                                                                    
+SALESMAN        5600                                                                                                                                                                                    
+PRESIDENT       5000                                                                                                                                                                                    
+MANAGER         8275                                                                                                                                                                                    
+ANALYST         6000                                                                                                                                                                                    
+
+SQL> --Q44
+SQL> SELECT JOB, MAX(SAL)
+  2  FROM EMP
+  3  WHERE JOB NOT IN ('PRESIDENT', 'ANALYST')
+  4  GROUP BY JOB;
+
+JOB         MAX(SAL)                                                                                                                                                                                    
+--------- ----------                                                                                                                                                                                    
+CLERK           1300                                                                                                                                                                                    
+SALESMAN        1600                                                                                                                                                                                    
+MANAGER         2975                                                                                                                                                                                    
+
+SQL> --45
+SQL> SELECT DEPTNO, COUNT(*), SUM(SAL)
+  2  FROM EMP
+  3  GROUP BY DEPTNO;
+
+    DEPTNO   COUNT(*)   SUM(SAL)                                                                                                                                                                        
+---------- ---------- ----------                                                                                                                                                                        
+        30          6       9400                                                                                                                                                                        
+        20          5      10875                                                                                                                                                                        
+        10          3       8750                                                                                                                                                                        
+
+SQL> --Q46
+SQL> SELECT SUM(SAL), JOB
+  2  FROM EMP
+  3  WHERE HIREDATE LIKE '%81'
+  4  GROUP BY JOB;
+
+  SUM(SAL) JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+      5600 SALESMAN                                                                                                                                                                                     
+       950 CLERK                                                                                                                                                                                        
+      5000 PRESIDENT                                                                                                                                                                                    
+      8275 MANAGER                                                                                                                                                                                      
+      3000 ANALYST                                                                                                                                                                                      
+
+SQL> --Q47
+SQL> SELECT COUNT(*), JOB
+  2  FROM EMP
+  3  WHERE MGR IS NOT NULL
+  4  GROUP BY JOB;
+
+  COUNT(*) JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+         4 CLERK                                                                                                                                                                                        
+         4 SALESMAN                                                                                                                                                                                     
+         3 MANAGER                                                                                                                                                                                      
+         2 ANALYST                                                                                                                                                                                      
+
+SQL> --Q49
+SQL> --Q48
+SQL> SELECT JOB, HIREDATE
+  2  FROM EMP
+  3  WHERE COMM IS NOT NULL
+  4  GROUP BY JOB, HIREDATE
+  5  ORDER BY HIREDATE DESC;
+
+JOB       HIREDATE                                                                                                                                                                                      
+--------- ---------                                                                                                                                                                                     
+SALESMAN  28-SEP-81                                                                                                                                                                                     
+SALESMAN  08-SEP-81                                                                                                                                                                                     
+SALESMAN  22-FEB-81                                                                                                                                                                                     
+SALESMAN  20-FEB-81                                                                                                                                                                                     
+
+SQL> --Q49
+SQL> SELECT MIN(SAL), JOB
+  2  FROM EMP
+  3  WHERE ENAME LIKE 'A%'
+  4  GROUP BY JOB;
+
+  MIN(SAL) JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+      1600 SALESMAN                                                                                                                                                                                     
+      1100 CLERK                                                                                                                                                                                        
+
+SQL> --Q50
+SQL> SELECT COUNT(*), DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING JOB = 'SALESMAN';
+HAVING JOB = 'SALESMAN'
+       *
+ERROR at line 4:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT COUNT(*), DEPTNO
+  2  FROM EMP
+  3  WHERE JOB = 'SALESMAN'
+  4* GROUP BY DEPTNO
+  5  /
+
+  COUNT(*)     DEPTNO                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+         4         30                                                                                                                                                                                   
+
+SQL> SPOOL OFF

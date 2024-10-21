@@ -1,0 +1,185 @@
+SQL> SET PAGES 200 LINES 200;
+SQL> --Q.110
+SQL> SELECT DEPTNO
+  2     FROM EMP
+  3     GROUP BY DEPTNO
+  4     HAVING SUM(SAL) < 5000;
+
+no rows selected
+
+SQL> --Q.109
+SQL> SELECT COUNT(ENAME)
+  2      FROM EMP
+  3      GROUP BY DEPTNO
+  4      HAVING COMM > 500;
+    HAVING COMM > 500
+           *
+ERROR at line 4:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT COUNT(ENAME)
+  2      FROM EMP
+  3      GROUP BY DEPTNO,COMM
+  4*     HAVING COMM > 500
+SQL> /
+
+COUNT(ENAME)                                                                                                                                                                                            
+------------                                                                                                                                                                                            
+           1                                                                                                                                                                                            
+
+SQL> --Q.108
+SQL>  SELECT DEPTNO
+  2      FROM EMP
+  3      GROUP BY DEPTNO
+  4     HAVING SUM(SAL) > 5000;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+
+SQL> --Q.107
+SQL>   SELECT DEPTNO
+  2    FROM EMP
+  3    GROUP BY DEPTNO,JOB
+  4    HAVING JOB = 'PRESIDENT';
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+
+SQL> --Q.106
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING SAL < 5000;
+HAVING SAL < 5000
+       *
+ERROR at line 4:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO,SAL
+  4* HAVING SAL < 5000
+SQL> /
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+
+11 rows selected.
+
+SQL> --Q.105
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  WHERE DEPTNO IN 30
+  4  GROUP BY DEPTNO
+  5  HAVING ENAME LIKE '%MAN%';
+HAVING ENAME LIKE '%MAN%'
+       *
+ERROR at line 5:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DEPTNO
+  2  FROM EMP
+  3  WHERE DEPTNO IN 30
+  4  GROUP BY DEPTNO,ENAME
+  5* HAVING ENAME LIKE '%MAN%'
+SQL> /
+
+no rows selected
+
+SQL> --Q.104
+SQL> SELECT COUNT(ENAME
+  2  )
+  3  FROM EMP
+  4  WHERE ENAME LIKE '%S' OR ENAME LIKE '%A'
+  5  GROUP BY JOB , EMPNO
+  6  HAVING COUNT(EMPNO) >= 3;
+
+no rows selected
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT COUNT(ENAME
+  2  )
+  3  FROM EMP
+  4  WHERE ENAME LIKE '%S' OR ENAME LIKE '%A'
+  5  GROUP BY JOB 
+  6* HAVING COUNT(EMPNO) >= 3
+SQL> /
+
+no rows selected
+
+SQL> --Q.103
+SQL> SELECT MAX(SAL) , DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO;
+
+  MAX(SAL)     DEPTNO                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+      2850         30                                                                                                                                                                                   
+      3000         20                                                                                                                                                                                   
+      5000         10                                                                                                                                                                                   
+
+SQL> --Q.102
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(EMPNO) = 3;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+
+SQL> --Q.101
+SQL> SELECT COUNT(JOB)
+  2  FROM EMP
+  3  WHERE JOB = 'SALESMAN'
+  4  GROUP BY DEPTNO
+  5  HAVING DEPTNO NOT IN 20;
+
+COUNT(JOB)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+         4                                                                                                                                                                                              
+
+SQL> --Q.100
+SQL> SELECT COUNT(JOB)
+  2  FROM EMP
+  3  WHERE JOB = 'MANAGER'
+  4  GROUP BY DEPTNO;
+
+COUNT(JOB)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+
+
+
+SQL> SPOOL OFF;

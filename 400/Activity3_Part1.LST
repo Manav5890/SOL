@@ -1,0 +1,189 @@
+SQL> SET PAGES 200 LINES 200;
+SQL> --Q.51
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(ENAME)>2;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+
+SQL> --Q.52
+SQL> SELECT COUNT(ENAME),COUNT(MGR),DEPTNO
+  2    2  FROM EMP
+  3    3  GROUP BY DEPTNO;
+  2  FROM EMP
+  *
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT COUNT(ENAME),COUNT(MGR),DEPTNO
+  2     FROM EMP
+  3*   GROUP BY DEPTNO
+SQL> /
+
+COUNT(ENAME) COUNT(MGR)     DEPTNO                                                                                                                                                                      
+------------ ---------- ----------                                                                                                                                                                      
+           6          6         30                                                                                                                                                                      
+           5          5         20                                                                                                                                                                      
+           3          2         10                                                                                                                                                                      
+
+SQL> --Q.53
+SQL> SELECT MIN(SAL),JOB
+  2    FROM EMP
+  3    WHERE ENAME LIKE '%S'
+  4    GROUP BY JOB;
+
+  MIN(SAL) JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+       950 CLERK                                                                                                                                                                                        
+      2975 MANAGER                                                                                                                                                                                      
+
+SQL> --Q.54
+SQL>   SELECT DEPTNO
+  2      FROM EMP
+  3      WHERE ENAME LIKE '%MAN%' AND SAL > 1000
+  4     GROUP BY DEPTNO;
+
+no rows selected
+
+SQL> --Q.55
+SQL> SELECT DEPTNO
+  2      FROM EMP
+  3      WHERE JOB = 'SALESMAN'
+  4      GROUP BY DEPTNO
+  5     HAVING COUNT(JOB)>3;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+
+SQL> --Q.56
+SQL> SELECT DEPTNO
+  2      FROM EMP
+  3      WHERE JOB = 'SALESMAN'
+  4      GROUP BY DEPTNO
+  5     HAVING COUNT(JOB)>3;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+
+SQL> --Q.57
+SQL> SELECT DEPTNO
+  2      FROM EMP
+  3      WHERE JOB = 'SALESMAN'
+  4      GROUP BY DEPTNO
+  5     HAVING COUNT(JOB)>3;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+
+SQL> --Q.58
+SQL>  SELECT DEPTNO , SAL,JOB,ENAME
+  2      FROM EMP
+  3      WHERE SAL > 2000 AND DEPTNO NOT IN (20)
+  4      GROUP BY DEPTNO , SAL,ENAME,JOB
+  5     ORDER BY SAL DESC;
+
+    DEPTNO        SAL JOB       ENAME                                                                                                                                                                   
+---------- ---------- --------- ----------                                                                                                                                                              
+        10       5000 PRESIDENT KING                                                                                                                                                                    
+        30       2850 MANAGER   BLAKE                                                                                                                                                                   
+        10       2450 MANAGER   CLARK                                                                                                                                                                   
+
+SQL> --Q.59
+SQL>  SELECT DEPTNO , SAL,JOB,ENAME
+  2       FROM EMP
+  3       WHERE SAL > 2000 AND DEPTNO NOT IN (20)
+  4      GROUP BY DEPTNO , SAL,ENAME,JOB
+  5     ORDER BY SAL DESC;
+
+    DEPTNO        SAL JOB       ENAME                                                                                                                                                                   
+---------- ---------- --------- ----------                                                                                                                                                              
+        10       5000 PRESIDENT KING                                                                                                                                                                    
+        30       2850 MANAGER   BLAKE                                                                                                                                                                   
+        10       2450 MANAGER   CLARK                                                                                                                                                                   
+
+SQL> --Q.60
+SQL> SELECT MAX(SAL)
+  2      FROM EMP
+  3      GROUP BY MGR;
+
+  MAX(SAL)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+      2975                                                                                                                                                                                              
+      5000                                                                                                                                                                                              
+      1300                                                                                                                                                                                              
+      1600                                                                                                                                                                                              
+       800                                                                                                                                                                                              
+      3000                                                                                                                                                                                              
+      1100                                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> --Q.61
+SQL>  SELECT DEPTNO , SUM(SAL)
+  2      FROM EMP
+  3      GROUP BY DEPTNO
+  4     ORDER BY SUM(SAL);
+
+    DEPTNO   SUM(SAL)                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+        10       8750                                                                                                                                                                                   
+        30       9400                                                                                                                                                                                   
+        20      10875                                                                                                                                                                                   
+
+SQL> --Q.62
+SQL> SELECT COUNT(MGR),DEPTNO
+  2      FROM EMP
+  3     GROUP BY DEPTNO;
+
+COUNT(MGR)     DEPTNO                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+         6         30                                                                                                                                                                                   
+         5         20                                                                                                                                                                                   
+         2         10                                                                                                                                                                                   
+
+SQL> --Q.63
+SQL> SELECT SUM(SAL),JOB
+  2      FROM EMP
+  3      WHERE JOB IN ('CLERK','MANAGER') AND SAL > 1500 AND COMM IS NULL
+  4     GROUP BY JOB;
+
+  SUM(SAL) JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+      8275 MANAGER                                                                                                                                                                                      
+
+SQL> --Q.64
+SQL> SELECT DEPTNO , COUNT(ENAME) , SUM(SAL)
+  2      FROM EMP
+  3      GROUP BY DEPTNO
+  4     ORDER BY SUM(SAL) DESC;
+
+    DEPTNO COUNT(ENAME)   SUM(SAL)                                                                                                                                                                      
+---------- ------------ ----------                                                                                                                                                                      
+        20            5      10875                                                                                                                                                                      
+        30            6       9400                                                                                                                                                                      
+        10            3       8750                                                                                                                                                                      
+
+SQL> --Q.65
+SQL> SELECT DEPTNO , COUNT(MGR)
+  2     FROM EMP
+  3     GROUP BY DEPTNO;
+
+    DEPTNO COUNT(MGR)                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+        30          6                                                                                                                                                                                   
+        20          5                                                                                                                                                                                   
+        10          2                                                                                                                                                                                   
+
+SQL> SPOOL OFF;

@@ -1,0 +1,362 @@
+SQL> SET PAGES 200 LINES 200;
+SQL> 
+SQL> --Q.97
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  WHERE SAL>2000 AND JOB NOT IN 'MANAGER'
+  4  GROUP BY DEPTNO;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+
+SQL> --Q.96
+SQL> SELECT ENAME
+  2  FROM EMP
+  3  WHERE MGR IS NOT NULL AND SAL BETWEEN 1000 AND 2500
+  4  GROUP BY JOB , ENAME;
+
+ENAME                                                                                                                                                                                                   
+----------                                                                                                                                                                                              
+WARD                                                                                                                                                                                                    
+CLARK                                                                                                                                                                                                   
+MILLER                                                                                                                                                                                                  
+TURNER                                                                                                                                                                                                  
+ADAMS                                                                                                                                                                                                   
+MARTIN                                                                                                                                                                                                  
+ALLEN                                                                                                                                                                                                   
+
+7 rows selected.
+
+SQL> --Q.95
+
+
+  1  SELECT MIN(SAL) ,JOB
+  2  FROM EMP
+  3  WHERE DEPTNO NOT IN 10
+  4  GROUP BY JOB
+  5  HAVING MIN(SAL) = 1000
+  6* ORDER BY MIN(SAL)
+SQL> /
+
+no rows selected
+
+SQL> --Q.94
+
+
+  1  SELECT *
+  2  FROM EMP
+  3* WHERE SAL NOT BETWEEN 1250 AND 4000
+SQL> 
+SQL> /
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                   
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                   
+      7369 SMITH      CLERK           7902 17-DEC-80        800                    20                                                                                                                   
+      7839 KING       PRESIDENT            17-NOV-81       5000                    10                                                                                                                   
+      7876 ADAMS      CLERK           7788 23-MAY-87       1100                    20                                                                                                                   
+      7900 JAMES      CLERK           7698 03-DEC-81        950                    30                                                                                                                   
+
+SQL> --Q.93
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  WHERE JOB = 'SALESMAN'
+  4  GROUP BY DEPTNO
+  5  HAVING COUNT(JOB)>1;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+
+SQL> --Q.91
+
+
+  1  SELECT MAX(SAL),DEPTNO
+  2  FROM EMP
+  3  WHERE DEPTNO NOT IN 20
+  4  GROUP BY JOB , DEPTNO
+  5  HAVING MAX(SAL) > 2000
+  6* ORDER BY MAX(SAL) 
+SQL> /
+
+  MAX(SAL)     DEPTNO                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+      2450         10                                                                                                                                                                                   
+      2850         30                                                                                                                                                                                   
+      5000         10                                                                                                                                                                                   
+
+SQL> --Q.90
+SQL> SELECT COUNT(ENAME) , DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING JOB LIKE '%T';
+HAVING JOB LIKE '%T'
+       *
+ERROR at line 4:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT COUNT(ENAME) , DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO,JOB
+  4* HAVING JOB LIKE '%T'
+SQL> /
+
+COUNT(ENAME)     DEPTNO                                                                                                                                                                                 
+------------ ----------                                                                                                                                                                                 
+           1         10                                                                                                                                                                                 
+           2         20                                                                                                                                                                                 
+
+SQL> --Q.89
+SQL> SELECT DEPTNO , SUM(SAL)
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  ORDER BY SUM(SAL) DESC;
+
+    DEPTNO   SUM(SAL)                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+        20      10875                                                                                                                                                                                   
+        30       9400                                                                                                                                                                                   
+        10       8750                                                                                                                                                                                   
+
+SQL> --Q.88
+SQL> SELECT COUNT(ENAME)
+  2  FROM EMP
+  3  WHERE HIREDATE BETWEEN '01-JAN-80' AND '31-DEC-82';
+
+COUNT(ENAME)                                                                                                                                                                                            
+------------                                                                                                                                                                                            
+          12                                                                                                                                                                                            
+
+SQL> --Q.87
+SQL> SELECT ENAME , JOB
+  2  FROM EMP
+  3  WHERE COMM > 250 AND MGR LIKE '76%'
+  4  GROUP BY JOB,ENAME ;
+
+ENAME      JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+WARD       SALESMAN                                                                                                                                                                                     
+MARTIN     SALESMAN                                                                                                                                                                                     
+ALLEN      SALESMAN                                                                                                                                                                                     
+
+
+SQL> --Q.86
+SQL>  SELECT ENAME , JOB
+  2   FROM EMP
+  3   WHERE COMM > 250 AND MGR LIKE '76%'
+  4   GROUP BY JOB,ENAME ;
+
+ENAME      JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+WARD       SALESMAN                                                                                                                                                                                     
+MARTIN     SALESMAN                                                                                                                                                                                     
+ALLEN      SALESMAN                                                                                                                                                                                     
+
+SQL> --Q.85
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(ENAME)>2;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+
+SQL> --Q.84
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(ENAME)>2;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+
+SQL> --Q.83
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(ENAME)>2;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+
+SQL> --Q.82
+SQL> SELECT MAX(SAL)
+  2  FROM EMP
+  3  GROUP BY JOB
+  4  HAVING MAX(SAL)> 2000;
+
+  MAX(SAL)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+      5000                                                                                                                                                                                              
+      2975                                                                                                                                                                                              
+      3000                                                                                                                                                                                              
+
+SQL> --Q.81
+
+  1  SELECT MAX(HIREDATE),JOB
+  2  FROM EMP
+  3  WHERE ENAME NOT LIKE '%N'
+  4* GROUP BY JOB
+SQL> /
+
+MAX(HIRED JOB                                                                                                                                                                                           
+--------- ---------                                                                                                                                                                                     
+23-MAY-87 CLERK                                                                                                                                                                                         
+08-SEP-81 SALESMAN                                                                                                                                                                                      
+17-NOV-81 PRESIDENT                                                                                                                                                                                     
+09-JUN-81 MANAGER                                                                                                                                                                                       
+19-APR-87 ANALYST                                                                                                                                                                                       
+
+SQL> --Q.80
+SQL> SELECT MIN(SAL),JOB
+  2  FROM EMP
+  3  WHERE ENAME NOT LIKE '%K'
+  4  GROUP BY JOB;
+
+  MIN(SAL) JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+       800 CLERK                                                                                                                                                                                        
+      1250 SALESMAN                                                                                                                                                                                     
+      5000 PRESIDENT                                                                                                                                                                                    
+      2850 MANAGER                                                                                                                                                                                      
+      3000 ANALYST                                                                                                                                                                                      
+
+SQL> --Q.79
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING SUM(SAL) < 5000;
+
+no rows selected
+
+SQL> --Q.78
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  WHERE JOB = 'SALESMAN'
+  4  GROUP BY DEPTNO
+  5  HAVING COUNT(JOB) > 2;
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+
+SQL> --Q.77
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  WHERE MGR IN '7839' AND ENAME LIKE '%S';
+
+    DEPTNO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+
+SQL> --Q.76
+
+
+  1  SELECT COUNT(ENAME) , DEPTNO , JOB
+  2  FROM EMP
+  3  WHERE SAL > 1000
+  4* GROUP BY JOB, DEPTNO
+  5  /
+
+COUNT(ENAME)     DEPTNO JOB                                                                                                                                                                             
+------------ ---------- ---------                                                                                                                                                                       
+           1         20 MANAGER                                                                                                                                                                         
+           1         10 PRESIDENT                                                                                                                                                                       
+           1         10 CLERK                                                                                                                                                                           
+           4         30 SALESMAN                                                                                                                                                                        
+           2         20 ANALYST                                                                                                                                                                         
+           1         30 MANAGER                                                                                                                                                                         
+           1         10 MANAGER                                                                                                                                                                         
+           1         20 CLERK                                                                                                                                                                           
+
+8 rows selected.
+
+SQL> --Q.75
+SQL> SELECT COUNT(ENAME)
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(ENAME) > 3;
+
+COUNT(ENAME)                                                                                                                                                                                            
+------------                                                                                                                                                                                            
+           6                                                                                                                                                                                            
+           5                                                                                                                                                                                            
+
+SQL> --Q.74
+
+
+  1  SELECT DNAME
+  2  FROM DEPT
+  3  WHERE DEPTNO IN (SELECT DEPTNO
+  4                  FROM EMP
+  5                  GROUP BY DEPTNO
+  6*                 HAVING COUNT(ENAME) > 1)
+SQL> /
+
+DNAME                                                                                                                                                                                                   
+--------------                                                                                                                                                                                          
+SALES                                                                                                                                                                                                   
+RESEARCH                                                                                                                                                                                                
+ACCOUNTING                                                                                                                                                                                              
+
+SQL> --Q.73
+
+
+  1  SELECT MIN(SAL),JOB
+  2  FROM EMP
+  3  WHERE JOB IN ('SALESMAN','CLERK')
+  4* GROUP BY JOB
+SQL> /
+
+  MIN(SAL) JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+       800 CLERK                                                                                                                                                                                        
+      1250 SALESMAN                                                                                                                                                                                     
+
+SQL> --Q.72
+
+
+  1  SELECT MIN(SAL),DEPTNO,ENAME
+  2  FROM EMP
+  3  GROUP BY DEPTNO,ENAME
+  4* HAVING ENAME LIKE '__A__'
+SQL> /
+
+  MIN(SAL)     DEPTNO ENAME                                                                                                                                                                             
+---------- ---------- ----------                                                                                                                                                                        
+      2850         30 BLAKE                                                                                                                                                                             
+      1100         20 ADAMS                                                                                                                                                                             
+      2450         10 CLARK                                                                                                                                                                             
+
+SQL> --Q.71
+SQL> SELECT DEPTNO , JOB
+  2  FROM EMP
+  3  WHERE JOB LIKE '%ER%'
+  4  /
+
+    DEPTNO JOB                                                                                                                                                                                          
+---------- ---------                                                                                                                                                                                    
+        20 CLERK                                                                                                                                                                                        
+        20 MANAGER                                                                                                                                                                                      
+        30 MANAGER                                                                                                                                                                                      
+        10 MANAGER                                                                                                                                                                                      
+        20 CLERK                                                                                                                                                                                        
+        30 CLERK                                                                                                                                                                                        
+        10 CLERK                                                                                                                                                                                        
+
+7 rows selected.
+SQL> SPOOL OFF;
